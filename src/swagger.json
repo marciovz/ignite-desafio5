@@ -1,0 +1,325 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Gerenciamento de Usuários",
+    "description": "Esta é uma api para gerenciamento de usuários",
+    "version": "1.0.0",
+    "contact": {
+      "email": "contato@mail.local.com"
+    }
+  },
+  "paths": {
+    "/users": {
+      "post": {
+        "tags": ["User"],
+        "summary": "Cria um novo usuário",
+        "requestBody": {
+          "required": "true",
+          "description": "Campos obrigatórios para criação de um usuário",
+          "content": {
+            "aplication/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "name": "John Due",
+                "email": "john.due@local.com"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Operação realizada com sucesso",
+            "content": {
+              "aplication/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "uuid"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "admin": {
+                      "type": "boolean"
+                    },
+                    "created_at": {
+                      "type": "date"
+                    },
+                    "updated_at": {
+                      "type": "date"
+                    }
+                  }
+                },
+                "example": {
+                  "id": "a32d8169-65ef-4d48-a2c1-a595ff748116",
+                  "name": "John Due",
+                  "email": "john.due@local.com",
+                  "admin": "false",
+                  "created_at": "2021-03-15T15:25:26.992z",
+                  "updated_at": "2021-03-15T15:25:26.992z"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Email já cadastrado",
+            "content": {
+              "aplication/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    } 
+                  }
+                },
+                "example": {
+                  "error": "This email already existes"
+                }
+              }
+            }            
+          }
+        }
+      },
+      "get": {
+        "tags": ["User"],
+        "summary": "Retorna todos os usuários",
+        "description": "Somente usuários admin pode acessar",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "user_id",
+            "type": "string",
+            "required": "true"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operação realizada com sucesso",
+            "content": {
+              "aplication/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "email": {
+                        "type": "string"
+                      },
+                      "admin": {
+                        "type": "boolean"
+                      },
+                      "created_at": {
+                        "type": "date"
+                      },
+                      "updated_at": {
+                        "type": "date"
+                      }
+                    }
+                  }
+                },
+                "example": [
+                  {
+                    "id": "a32d8169-65ef-4d48-a2c1-a595ff748116",
+                    "name": "John Due",
+                    "email": "john.due@local.com",
+                    "admin": "false",
+                    "created_at": "2021-03-15T15:25:26.992z",
+                    "updated_at": "2021-03-15T15:25:26.992z"
+                  },
+                  {
+                    "id": "a32d8169-65ef-4d48-a2c1-a595ff748116",
+                    "name": "John Due",
+                    "email": "john.due@local.com",
+                    "admin": "false",
+                    "created_at": "2021-03-15T15:25:26.992z",
+                    "updated_at": "2021-03-15T15:25:26.992z"
+                  }
+                ]
+              }
+            }
+          },
+          "400":{
+            "description": "Usuário sem permissão ou não encontado",
+            "content": {
+              "aplication/json": {
+                "schema":{
+                  "properties":{
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "error": "Permission dianed"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{user_id}": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Retorna usuário específico",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user_id",
+            "type": "string",
+            "required": "true",
+            "description": "ID do usuário"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operação realizada com sucesso",
+            "content": {
+              "aplication/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "admin": {
+                      "type": "boolean"
+                    },
+                    "created_at": {
+                      "type": "date"
+                    },
+                    "updated_at": {
+                      "type": "date"
+                    }
+                  }
+                },
+                "example": {
+                  "id": "a32d8169-65ef-4d48-a2c1-a595ff748116",
+                  "name": "John Due",
+                  "email": "john.due@local.com",
+                  "admin": "false",
+                  "created_at": "2021-03-15T15:25:26.992z",
+                  "updated_at": "2021-03-15T15:25:26.992z"
+                }
+              }
+            }
+          },
+          "404":{
+            "description": "Usuário não encontado",
+            "content": {
+              "aplication/json": {
+                "schema":{
+                  "properties":{
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "error": "User not found"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{user_id}/admin": {
+      "patch": {
+        "tags": ["User"],
+        "summary": "Torna admin um usuário",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user_id",
+            "type": "string",
+            "required": "true",
+            "description": "ID do usuário"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operação realizada com sucesso",
+            "content": {
+              "aplication/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "admin": {
+                      "type": "boolean"
+                    },
+                    "created_at": {
+                      "type": "date"
+                    },
+                    "updated_at": {
+                      "type": "date"
+                    }
+                  }
+                },
+                "example": {
+                  "id": "a32d8169-65ef-4d48-a2c1-a595ff748116",
+                  "name": "John Due",
+                  "email": "john.due@local.com",
+                  "admin": "false",
+                  "created_at": "2021-03-15T15:25:26.992z",
+                  "updated_at": "2021-03-15T15:25:26.992z"
+                }
+              }
+            }
+          },
+          "404":{
+            "description": "Usuário não encontado",
+            "content": {
+              "aplication/json": {
+                "schema":{
+                  "properties":{
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "error": "User not found"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
